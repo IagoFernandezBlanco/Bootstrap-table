@@ -20,7 +20,7 @@
 
   <table data-toggle="table"
   data-show-export="true" 
-  data-url="https://corona.lmao.ninja/v3/covid-19/countries/Spain%2C%20Mexico?strict=true">
+  data-url="https://corona.lmao.ninja/v3/covid-19/countries/Spain,Italy,Germany,Poland,Finland">
   <thead>
     <tr>
     <th data-field="country">Pais</th>
@@ -30,29 +30,40 @@
   </tr>
   </thead>
   </table>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
-    crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+  <div class="container mt-2">
+    <form onsubmit="addCountry(event)"><label for="next-country">Add Country</label>
+      <input id="next-country" type="text">
+      <input type="submit">
+    </form>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+  integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+  crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/libs/jsPDF/jspdf.min.js"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
   <script>
+    let url = "https://corona.lmao.ninja/v3/covid-19/countries/Spain,Italy,Germany,Poland,Finland"
     function fechaFormatter(value, row) {
     var timestamp = value
     var date = new Date(timestamp);
- 
-
-  return date.getDate()+
-          "/"+(date.getMonth()+1)+
-          "/"+date.getFullYear()+
-          " "+date.getHours()+
-          ":"+date.getMinutes()+
-          ":"+date.getSeconds();
-  }
+    return date.getDate()+
+      "/"+(date.getMonth()+1)+
+      "/"+date.getFullYear()+
+      " "+date.getHours()+
+      ":"+date.getMinutes()+
+      ":"+date.getSeconds();
+    }
   function cellStyle(value, row, index) {
-    
-
     if (value<40000) {
       return {
         css:{
@@ -60,18 +71,16 @@
         }
       }
     return {
-     
-      }
-    }else if(value>170000){
+    }
+    }else if(value>4000 && value<=170000){
       return{
         css:{
           background: 'red'
         }
       }
       return{
-
       }
-    }else if (value>4000 && value<=170000){
+    }else if (value>170000){
       return{
         css:{
           background: 'orange'
@@ -79,7 +88,14 @@
       }
     }
   }
-  
+  function addCountry(e) {
+  var $table = $('#table')
+  e.preventDefault()
+  url += ',' + document.querySelector('#next-country').value
+  $table.bootstrapTable('refresh', {
+    url: url
+  })
+}
   </script>
   
 </body>
